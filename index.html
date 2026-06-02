@@ -15,7 +15,7 @@
 
     <!-- Content Security Policy (CSP) for Enhanced Security -->
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://vitals.vercel-analytics.com https://va.vercel-scripts.com https://wa.me; frame-src 'self' https://wa.me;">
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://vitals.vercel-analytics.com https://wa.me; frame-src 'self' https://wa.me;">
 
     <!-- Fonts -->
     <link
@@ -1028,7 +1028,7 @@
             { id: 14, categoria: 'iPhone', name: 'iPhone 17 Pro', descripcion: "Titanio de grado aeroespacial y el nuevo chip A19 Pro.", price: 2085, imgDefault: 'imagenes/iphone17t.png', esIphone: true, capacidades: [{ lab: '256GB', extra: 0 }, { lab: '512GB', extra: 214 }, { lab: '1TB', extra: 600 }], colores: ['Naranja Cosmico', 'Silver', 'Azul Profundo'] },
             { id: 4, categoria: 'iPhone', name: 'iPhone 17', descripcion: "Potencia y elegancia en nuevos colores vibrantes.", price: 1200, imgDefault: 'imagenes/iphone17todos.jpg', esIphone: true, capacidades: [{ lab: '128GB', extra: 0 }, { lab: '256GB', extra: 300 }], colores: ['Lavanda', 'Salvia', 'Blanco', 'Azul niebla', 'Negro'] },
             { id: 1, categoria: 'PC', name: 'RTX 4080 Super', descripcion: "Arquitectura Ada Lovelace para un ray tracing inigualable.", price: 1250, imgDefault: 'imagenes/rtx4080.jpg', opciones: ['ASUS TUF Edition', 'MSI Suprim (+$120)'] },
-            { id: 2, categoria: 'Toner', name: 'Toner Canon 067H', descripcion: "Cartucho original de alta capacidad para impresiones láser a color.", price: 65, imgDefault: 'imagenes/toner067hcanon.jpg', esCanon067h: true, colores: ['Negro', 'Cian', 'Magenta', 'Amarillo', 'Pack completo (4 colores) (+$150)'] },
+            { id: 2, categoria: 'Toner', name: 'Toner Canon 067H', descripcion: "Cartucho original de alta capacidad para impresiones láser a color.", price: 310, imgDefault: 'imagenes/toner067hcanon.jpg', esCanon067h: true, colores: ['Negro', 'Cian (+$20)', 'Magenta (+$20)', 'Amarillo (+$20)', 'Pack completo (4 colores) (+$990)'] },
             { id: 7, categoria: 'Accesorios de Pc', name: 'Mouse Pad', descripcion: "Almohadilla para raton ergonomico con gel.", price: 20, imgDefault: 'imagenes/mousepadnegro.webp', opciones: ['Estandar'] },
             { id: 8, categoria: 'Accesorios de Pc', name: 'Bolso Samsonite', descripcion: "Comodidad y espacio para guardar laptop hasta de 16´.", price: 170, imgDefault: 'imagenes/bolsosamsonite.jpg', opciones: ['Estandar'] },
             { id: 9, categoria: 'Accesorios de iPhone', name: 'Cargador 20W USB-C', descripcion: "Cargador de 20W USB-C, ORIGINAL.", price: 25, imgDefault: 'imagenes/cargador20w.jpg', opciones: ['Estandar', 'Con cable de 1m USB-C (+$20)'] },
@@ -1293,7 +1293,10 @@
             // Strip HTML tags and limit length
             const cleanCliente = rawCliente.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 50);
 
-            let msg = `🛒 *COTIZACIÓN FullPrintTech - ${cleanCliente}*%0A%0A`;
+                        let folioRaw = localStorage.getItem('folio_fpt');
+            let folio = parseInt(folioRaw);
+            if (isNaN(folio)) { folio = 1001; }
+            let msg = `🛒 *COTIZACIÓN #${folio} FullPrintTech - ${cleanCliente}*%0A%0A`;
             carrito.forEach(i => msg += `• ${i.nombre} x${i.cantidad} (${i.opcion}) - ${i.subtotal}$%0A`);
             msg += `%0ATasa de cambio: ${TASA_BCV.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Bs.%0A`;
             const totalVal = carrito.reduce((acc, i) => acc + i.subtotal, 0);
@@ -1302,6 +1305,11 @@
             // SECURITY: target="_blank" combined with rel="noopener noreferrer" equivalents in JS window.open
             const waWindow = window.open(`https://wa.me/58424*****?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
             if (waWindow) waWindow.opener = null;
+
+            // Incrementar folio
+            let nuevoFolio = folio + 1;
+            localStorage.setItem('folio_fpt', nuevoFolio.toString());
+            document.getElementById('nro-cotizacion').innerText = nuevoFolio;
         }
 
 
