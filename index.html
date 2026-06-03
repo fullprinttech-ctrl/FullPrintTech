@@ -1012,7 +1012,7 @@
     </footer>
 
     <!-- PRODUCT CONFIGURATOR MODAL -->
-    <div id="miModal" class="modal">
+    <div id="miModal" class="modal" onclick="if(event.target === this) cerrarModal()">
         <div class="modal-content">
             <span class="btn-close-modal" onclick="cerrarModal()">✕</span>
             <img id="modalImg" src="" alt="Producto Configurar" style="width:100%; height:200px; object-fit:contain;">
@@ -1218,6 +1218,7 @@
                 showToast(`${p.name} (${seleccionLab}) añadido.`);
             };
             document.getElementById('miModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
 
         function cambiarCantModal(delta) {
@@ -1300,7 +1301,10 @@
             actualizarCarritoUI();
         }
 
-        function cerrarModal() { document.getElementById('miModal').style.display = 'none'; }
+        function cerrarModal() { 
+            document.getElementById('miModal').style.display = 'none'; 
+            document.body.style.overflow = ''; 
+        }
         function irAlInicio() { window.scrollTo({ top: 0, behavior: 'smooth' }); limpiarBuscador(); }
         function irAlCarrito() { document.getElementById('carrito-ancla').scrollIntoView({ behavior: 'smooth' }); }
 
@@ -1428,13 +1432,7 @@
             showToast("Cotización descargada con éxito.");
         }
 
-        // Close configured modal when clicking outside elements
-        window.onclick = function (event) {
-            const modal = document.getElementById('miModal');
-            if (event.target == modal) {
-                cerrarModal();
-            }
-        }
+        // (window.onclick logic removed since it is now handled directly via inline onclick on the modal div)
     </script>
 </body>
 
